@@ -96,5 +96,9 @@ docker build -t mysensorstracker .
 
 ### run
 ```
-docker run --network host mysensorstracker
+docker run -d --network host --name mysensorstracker mysensorstracker
+```
+### view logs
+```
+docker logs mysensorstracker
 ```
