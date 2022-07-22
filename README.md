@@ -27,26 +27,32 @@ sudo apt-get install sqlite3
 sudo apt-get install python3 python3-venv python3-dev
 ```
 
+For running in docker, see section below.
+
 Installation
 ------------
+(For running in Docker see docker section.)
+
 Install the source files in any folder, say `~/mytracker` .
 Now install the required libraries
 ```sh
 cd ~/mytracker
 python3 -m venv venv
 source venv/bin/activate
-pip3 install peewee flask wtforms paho-mqtt
+pip3 install -r requirements
 ```
 
 Now you can just run the app
-```sh
-venv/bin/python app.py
+```
+source venv/bin/activate
+./app.py
 ```
 This will start the built-in webserver on port 5000. 
 
 The Flask people recommend not to use the built-in server for a production environment, but I decided it was good enough for my use at home. This has been running for >6 months now, without a glitch. logging messsages from ~20 MySensors nodes.
 
 Browse to http://*servername*:5000/nodes, and you should see the MySensorsTracker UI.
+
 
 Configuration 
 -------------
@@ -79,3 +85,16 @@ files=conf.d/*.conf
 ```
 Now I can view the status of the app by browsing to http://*servername*:9001
 
+
+Docker
+------
+
+### build
+```
+docker build -t mysensorstracker .
+```
+
+### run
+```
+docker run --network host mysensorstracker
+```
