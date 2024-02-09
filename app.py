@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 # -*- coding: utf-8 -*-
 #
 # @file          app.py
@@ -20,8 +22,8 @@
 # in the author's setup, the topic is 'my/N/stat/...' where N is number of the gateway
 
 MQTT_BROKER = "localhost"               # the name of your MQTT broker
-MQTT_TOPIC = "my/+/stat/#"              # the topic to subscribe to, includes wildcards
-MQTT_PATTERN = r'my\/\w+\/stat\/(.+)'   # regular expression to extract the interesting part of topic
+MQTT_TOPIC = "mysensors-out/#"              # the topic to subscribe to, includes wildcards
+MQTT_PATTERN = 'mysensors-out/(.+)'   # regular expression to extract the interesting part of topic
 
 import sys,re,time,os
 import logging
@@ -35,8 +37,19 @@ from playhouse.flask_utils import FlaskDB
 from playhouse.flask_utils import object_list
 from playhouse.hybrid import hybrid_property
 import wtforms as wtf                   # BSD license
+from math import floor
 
 import mysensors
+
+import argparse
+argparser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+argparser.add_argument('--host', default=MQTT_BROKER, help='mqtt server')
+argparser.add_argument('--port', default=1883, type=int, help='mqtt server port')
+argparser.add_argument('--topic', default=MQTT_TOPIC, help='subscribe topic')
+argparser.add_argument('--pattern', default=MQTT_PATTERN, help='regex pattern to extract from topic name')
+args = argparser.parse_args()
+
+pattern = re.compile(args.pattern)
 
 ##############################################################################
 #region Logging
@@ -525,7 +538,7 @@ def on_message(mqttc, userdata, msg):
     try:    
         payload = msg.payload.decode("utf-8")
         now = time.time()
-        m = re.search(MQTT_PATTERN,msg.topic)
+        m = re.search(pattern, msg.topic)
         if m is None:
             return
 
@@ -958,8 +971,8 @@ class ConfirmNewBatteryForm(wtf.Form):
 
 class LocationForm(wtf.Form):
     nid = wtf.IntegerField("Node:", render_kw={"class":"td-id edit ro", "tabindex":-1 })
-    sketch = wtf.TextField("Sketch:", render_kw={"class":"edit ro", "tabindex":-1 })
-    location = wtf.TextField("Location:", render_kw={"class":"edit", })
+    sketch = wtf.StringField("Sketch:", render_kw={"class":"edit ro", "tabindex":-1 })
+    location = wtf.StringField("Location:", render_kw={"class":"edit", })
 
 class LocationsForm(wtf.Form):
     locs = wtf.FieldList(wtf.FormField(LocationForm))
@@ -999,8 +1012,8 @@ class LocationsForm(wtf.Form):
 
 class BatteryForm(wtf.Form):
     nid = wtf.IntegerField("Node:", render_kw={"class":"td-id edit ro", "tabindex":-1 })
-    sketch = wtf.TextField("Sketch:", render_kw={"class":"edit ro", "tabindex":-1 })
-    location = wtf.TextField("Location:", render_kw={"class":"edit ro", "tabindex":-1 })
+    sketch = wtf.StringField("Sketch:", render_kw={"class":"edit ro", "tabindex":-1 })
+    location = wtf.StringField("Location:", render_kw={"class":"edit ro", "tabindex":-1 })
     bat_changed = wtf.DateField("Date:", render_kw={"class":"edit edit-date"})
 
 class BatteriesForm(wtf.Form):
@@ -1044,7 +1057,7 @@ class BatteriesForm(wtf.Form):
 def on_connect(client, userdata, flags, rc):
     applog.info("MQTT: connected with result code "+str(rc))
     if rc==0:
-        client.subscribe(MQTT_TOPIC)
+        client.subscribe(args.topic)
 
 def on_disconnect(client, userdata,  rc):
     applog.info("MQTT: disconnected")
@@ -1066,7 +1079,7 @@ def main():
     mqttc.on_message = on_message
     mqttc.on_connect = on_connect
     mqttc.on_disconnect = on_disconnect
-    mqttc.connect(MQTT_BROKER, 1883, keepalive=30)                  
+    mqttc.connect(args.host, args.port, keepalive=30)                  
     mqttc.loop_start()
     applog.info("listening to MQTT")
 

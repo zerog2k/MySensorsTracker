@@ -192,7 +192,7 @@ tr:nth-child(even) {
 /* styles for CONTEXT MENU -------------------------------- */
 
 .dropbtn {
-    padding: 8px;
+    padding: 12px;
     border: none;
 }
 
