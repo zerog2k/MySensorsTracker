@@ -61,9 +61,9 @@
   <!-- {{ td_or_none(entry.sk_version) }} -->
   <td>{{ dim_if_zero(entry.sk_revision) }}</td>
   <td class_"td-loc">{{ dim_if_none(entry.location) }}</td>
-  <td {% if days_ago(entry.lastseen) > 0 %} class="alert" {% endif %} >{{ entry.lastseen.strftime('%d.%m.%Y %H:%M') }}</td>
+  <td {% if days_ago(entry.lastseen) > 0.1 %} class="alert" {% endif %} >{{ entry.lastseen.strftime('%Y-%m-%d %H:%M') }}</td>
   <td class="td-days">{{ days_ago(entry.lastseen) }}</td>
-  <td class="td-date">{{ entry.bat_changed.strftime('%d.%m.%Y') if entry.bat_changed is not none else "?" }}</td>
+  <td class="td-date">{{ entry.bat_changed.strftime('%Y-%m-%d') if entry.bat_changed is not none else "?" }}</td>
   <td class="td-days">{{ dim_if_none( months_ago(entry.bat_changed) ) }}</td>
   <td class="td-days">{{ dim_if_none( entry.level ) }}</td>
 </tr>

@@ -64,7 +64,7 @@
   <td class="td-symbol">{{ dim_if_none( sensor_string(entry.typ) ) }}</td>
   {{ td_or_none(entry.name) }}
   <td>{{ values_string(entry.values) }}</td>
-  <td class="td-date {% if days_ago(entry.lastseen) > 0 %}alert{% endif %}" >{{ entry.lastseen.strftime('%d.%m.%Y %H:%M') }}</td>
+  <td class="td-date {% if days_ago(entry.lastseen) > 0 %}alert{% endif %}" >{{ entry.lastseen.strftime('%Y-%m-%d %H:%M') }}</td>
   <td class="td-days">{{ days_ago(entry.lastseen) }}</td>
 </tr>
 {% endfor %}

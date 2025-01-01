@@ -66,7 +66,7 @@
       <td class="td-id">{{ entry.typ }}</td>
       <td class="td-symbol">{{ type_string(entry.cmd, entry.typ) }}</td>
       {{ td_or_none(entry.payload) }}
-      <td class="td-date">{{ entry.received.strftime('%d.%m.%Y %H:%M:%S') }}</td>
+      <td class="td-date">{{ entry.received.strftime('%Y-%m-%d %H:%M:%S') }}</td>
     </tr>
   {% endfor %}
 </table>
