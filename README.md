@@ -96,7 +96,7 @@ docker build -t mysensorstracker .
 
 ### run
 ```
-docker run -d --network host --name mysensorstracker mysensorstracker
+docker run -d --network host -v $PWD/data:/app/data --name mysensorstracker mysensorstracker
 ```
 ### view logs
 ```

@@ -66,7 +66,7 @@
       <td class="td-symbol">{{ dim_if_none( sensor_string(entry.usid.typ) ) }}</td>
       <td class="td-symbol">{{ dim_if_none( value_string(entry.typ) ) }}</td>
       <td class="td-value">{{ dim_if_none(entry.value) }}</td>
-      <td class="td-date">{{ entry.received.strftime('%d.%m.%Y %H:%M') }}</td>
+      <td class="td-date">{{ entry.received.strftime('%Y-%m-%d %H:%M') }}</td>
     </tr>
   {% endfor %}
 </table>

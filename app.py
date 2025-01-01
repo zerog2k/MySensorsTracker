@@ -97,7 +97,7 @@ applog = init_logging()
 
 #endregion
 
-DATABASE_FILE = 'mysensors.db'
+DATABASE_FILE = 'data/mysensors.db'
 APP_DIR = os.path.dirname(os.path.realpath(__file__))
 DATABASE_URI = 'sqlite:///%s' % os.path.join(APP_DIR, DATABASE_FILE)
 
@@ -842,10 +842,10 @@ def my_processor():
         Args:
             dt (datetime): datestamp
         Returns:
-            int: number of days in the past
+            float: number of days in the past
         """
         if dt is not None:
-            return floor((dt.now()-dt).total_seconds()/(60*60*24))
+            return round((dt.now() - dt).total_seconds() / (60*60*24), 2)
         else:
             return None
 
@@ -854,10 +854,10 @@ def my_processor():
         Args:
             dt (datetime): datestamp
         Returns:
-            int: number of months in the past
+            float: number of months in the past
         """
         if dt is not None:
-            return round( (datetime.today().date() - dt).total_seconds() / (60*60*24*30) )
+            return round( (datetime.today().date() - dt).total_seconds() / (60*60*24*30), 1)
         else:
             return None
 
